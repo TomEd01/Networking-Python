@@ -38,12 +38,10 @@ def main():
     else:
         receive_first = False
     # Ahora gira nuestro enchufe de escucha
-    server_loop(local_host,local_port,remote_host,remote_port,receive_first)
-main()
+    server_loop("127.0.0.1",900,"10.12.132.1",900,True)
 def proxy_handler(client_socket, remote_host, remote_port, receive_first):
     # Conectarse al host remoto
-    remote_socket = socket.socket(socket.AF_INET,
-    socket.SOCK_STREAM)
+    remote_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     remote_socket.connect((remote_host,remote_port))
     # Reciba datos del extremo remoto si es necesario
     if receive_first:
@@ -91,7 +89,7 @@ def proxy_handler(client_socket, remote_host, remote_port, receive_first):
 def hexdump(src, length=16):
     result = []
     digits = 4 if isinstance(src, unicode) else 2
-    for i in xrange(0, len(src), length):
+    for i in range(0, len(src), length):
         s = src[i:i+length]
         hexa = b' '.join(["%0*X" % (digits, ord(x)) for x in s])
         text = b''.join([x if 0x20 <= ord(x) < 0x7F else b'.' for x in s])
@@ -122,3 +120,4 @@ def request_handler(buffer):
 def response_handler(buffer):
     # Realizar modificaciones de paquetes
     return buffer
+main()
